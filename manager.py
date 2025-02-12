@@ -1,15 +1,15 @@
-from tkinter import TK, Frame
+from tkinter import Tk, Frame
 from container import Container
 
-class manager (TK):
+class Manager (Tk):
     def __init__ (self, *args, **kwargs):
         super().__init__ (*args, **kwargs)
-        self.title ('Caja') # titulo
+        self.title ('Von Makeup') # titulo
         self.resizable(False,False) # No maximizar 
-        self.configure(bg='#FFC1CC') #Color de fondo 
+        self.configure(bg='#FBECEC') #Color de fondo 
         self.geometry('800x400+120+20')  # Posicion de la ventana y tamaño 
 
-        self.container = Frame (self, bg='#FFC1CC')
+        self.container = Frame (self, bg='#FBECEC')
         self.container.pack (fill='both', expand=True)
 
         self.frames = {
@@ -27,7 +27,7 @@ class manager (TK):
         frame = self.frames[frame_class]
         frame.tkraise()
 def main():
-    app = manager()
+    app = Manager()
     app.mainloop()
 
 if __name__ == "__main__":

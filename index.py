@@ -1,5 +1,5 @@
-from manager import manager
+from manager import Manager
 
 if __name__== '__main__':
-    app = manager()
+    app = Manager()
     app.mainloop()

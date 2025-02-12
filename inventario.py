@@ -6,7 +6,7 @@ class Inventario (tk.Frame):
     def __init__ (self, padre):
         super().__init__ (padre)
         self.pack()
-        self.widgets( )
+        self.widgets()
 
     def widgets(self):
         frame1 = tk.Frame(self, bg = '#dddddd', highlightbackground='gray',highlightthickness=1)
