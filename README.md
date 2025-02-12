@@ -1,2 +1,2 @@
 # Sistema-de-inventario
-Sistema de inventario para  manejo de pequeñas empresas y emprendimientos 
+Sistema de inventario y ventas basico, para poryectos de emprendimiento en el cual se puede desde generar una factura con productos, hasta llevar un inventario 
