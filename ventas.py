@@ -1,8 +1,12 @@
+import sqlite3
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk, messagebox
 
 class Ventas (tk.Frame): # definiendo la clase ventas 
+    db_name ="database.db"
+
+
     def __init__(self, parent):
         super().__init__(parent)
         self.widgets()
@@ -31,13 +35,19 @@ class Ventas (tk.Frame): # definiendo la clase ventas
         #etiqueta de producto con su entry
         label_nombre = tk.Label(lblframe, text="Productos:", bg= "#FBECEC", font="sans 12 bold")
         label_nombre.place(x=195, y=12 )
-        self.entry_nombre = ttk.Entry(lblframe, font="sans 12 bold")
+        self.entry_nombre = ttk.Combobox(lblframe, font="sans 12 bold", state="readonly")
         self.entry_nombre.place(x=285, y=10, width=180)
+
+        self.cargar_productos()
+
         #Etiqueta del precio, con su entry
         label_valor = tk.Label(lblframe, text = "Precio:", bg= "#FBECEC", font="sans 12 bold")
         label_valor.place(x=475,y=12)
-        self.entry_valor = ttk.Entry(lblframe, font="sans 12 bold" )
+        self.entry_valor = ttk.Entry(lblframe, font="sans 12 bold", state= "readonly" )
         self.entry_valor.place(x=535, y=10, width=180)
+
+        self.entry_nombre.bind("<<ComboboxSelected>>",self.actualizar_precio)
+
         #Etiqueta de la cantidad con su entry
         label_cantidad = tk.Label(lblframe, text="Cantidad: ", bg= "#FBECEC", font="sans 12 bold")
         label_cantidad.place(x=735,y=12)
@@ -83,3 +93,106 @@ class Ventas (tk.Frame): # definiendo la clase ventas
 
         boton_ver_facturas = tk.Button(lblframe1,text="Ver facturas", bg= "#CC84BC", font="sans 12 bold")
         boton_ver_facturas.place(x=750,y=10,width=240, height=50)
+
+        self.label_suma_total = tk.Label(frame2, text="Total a pagar: COP 0",bg= "#FBECEC", font="sans 25 bold")
+        self.label_suma_total.place(x= 360, y=335)
+
+    def cargar_productos(self):
+        try:
+            conn = sqlite3.connect(self.db_name)
+            c = conn.cursor()
+            c.execute("SELECT nombre FROM inventario")
+            productos = c.fetchall()
+            self.entry_nombre ["values"] = [producto [0] for producto in productos]
+            if not productos:
+                print("No se encontraron pruductos en la base de datos.")
+            conn.close()
+        except sqlite3.Error as e:
+            print("Error al cargar productos desde la base de datos.", e)
+
+    def actualizar_precio(self, event):
+        nombre_producto = self.entry_nombre.get()
+        try:
+            conn = sqlite3.connect(self.db_name)
+            c = conn.cursor()
+            c.execute("SELECT precio FROM inventario WHERE nombre = ?", (nombre_producto,))
+            precio = c.fetchone()
+            if (precio):
+                self.entry_valor.config(state="normal")
+                self.entry_valor.delete(0, tk.END)
+                self.entry_valor.insert(0, precio [0])
+                self.entry_valor.config(state="readonly")
+            else:
+                self.entry_valor.config(state="normal")
+                self.entry_valor.delete(0, tk.END)
+                self.entry_valor.insert(0, "Precio no disponible.")
+                self.entry_valor.config(state="readonly")
+        except sqlite3.Error as e:
+            messagebox.showerror("Error ", f"Error al obtener el precio: {e}")
+        finally:
+            conn.close()
+
+    def actualizar_total(self):
+        total = 0.0
+        for child in self.tree.get_children():
+            subtotal = float(self.tree.item(child, "values") [3])
+            total += subtotal
+        self.label_suma_total.config(text=f"Total a pagar: COP {total:.0f}")
+
+    def registrar(self):
+        producto = self.entry_nombre.get()
+        precio = self.entry_valor.get()
+        cantidad = self.entry_cantidad.get()
+
+        if producto and precio and cantidad:
+            try:
+                cantidad = int(cantidad)
+                if not self.verificar_stock(producto, cantidad):
+                    messagebox.showerror("Error ", "Stock insuficiente para el producto seleccionado")
+
+                precio = float(precio)
+                subtotal = cantidad * precio
+
+                self.tree.insert("", "end", values =(producto , f"{precio:.0f}", cantidad, f"subtotal:.0f"))
+
+                self.entry_nombre.set("")
+                self.entry_valor.config(state="normal")
+                self.entry_valor.delete(0, tk.END)
+                self.entry_valor.config(state="readonly")
+                self.entry_cantidad.delete(0, tk.END)
+
+                self.actualizar_total()
+            except ValueError:
+                messagebox.showerror("Error", "Cantidad o precio no validos")
+            
+        else:
+            messagebox.showerror("Error", "Debe completar todos los campos")
+
+    def verificar_stock(self, nombre_porducto, cantidad):
+        try:
+            conn = sqlite3.connect(self.db_name)
+            c = conn.cursor()
+            c.execute("SELECT stock FROM inventario WHERE nombre = ?", (nombre_porducto,))
+            stock = c.fetchone()
+            if stock and stock[0] >= cantidad:
+                return True
+            return False
+        except sqlite3.Error as e:
+            messagebox.showerror("Error", f"Error al verificar el stock: {e}")
+            return False
+
+        finally:
+            conn.close()
+
+    def obtener_total(self):
+
+        total = 0.0
+        for child in self.tree.get_children():
+            subtotal = float(self.tree.item(child, "values" [3]))
+            total += subtotal
+        return total
+
+    def pagar ()
+
+
+
