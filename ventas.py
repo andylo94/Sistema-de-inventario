@@ -335,7 +335,7 @@ class Ventas (tk.Frame): # definiendo la clase ventas
 
     # Centrar los títulos en la página
         c.setFont("Helvetica-Bold", 20)
-        c.drawCentredString(width / 2, height - 30, "RASGO S.A.S")
+        c.drawCentredString(width / 2, height - 30, "Nombre del comercio")
         c.setFont("Helvetica-Bold", 16)
         c.drawCentredString(width / 2, height - 60, f"Factura número: {factura_numero}")
 
