@@ -23,6 +23,6 @@ Este es un sistema simple de facturación e inventario donde puedes agregar y ed
    ```pip install reportlab```
 ## Uso:
    * Una vez copiado el repositorio y abierto en el editor de código de tu preferencia, el programa se ejecuta desde index.py. Desde aquí, puedes navegar por las ventanas de ventas e inventario, ver productos facturados y mirar la lista de productos en disponibles en la base de datos.
-   * __Si no deseas instalar Python ni ejecutar el código manualmente, puedes utilizar el ```exe``` descargandolo del siguiente link ```https://drive.google.com/file/d/1K9k8QkgxYKEqstfQAbD8IT_oR6P97IDX/view?usp=drive_link``` 
+   * __Si no deseas instalar Python ni ejecutar el código manualmente, puedes utilizar el ```exe``` descargandolo del siguiente link ```https://drive.google.com/file/d/1K9k8QkgxYKEqstfQAbD8IT_oR6P97IDX/view?usp=drive_link```__
 ## Contribuciones
 Si deseas contribuir a este proyecto, siéntete libre de hacer un fork y enviar un pull request con tus mejoras.
